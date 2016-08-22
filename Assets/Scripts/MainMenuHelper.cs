@@ -68,7 +68,7 @@ public class MainMenuHelper : MonoBehaviour {
 
 	private void playButtonHandle(){
 		//load game scene
-		Application.LoadLevel ("2dScene");
+		Application.LoadLevel ("gameSceneV2");
 	}
 
 	private void exitButtonHandle(){

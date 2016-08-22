@@ -47,11 +47,11 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\ChairState.cs" />
      <Compile Include="Assets\Scripts\ChairsController.cs" />
-     <Compile Include="Assets\Scripts\GameControl.cs" />
+     <Compile Include="Assets\Scripts\GameControlScript.cs" />
      <Compile Include="Assets\Scripts\MainMenuHelper.cs" />
      <Compile Include="Assets\Scripts\MusicController.cs" />
-     <Compile Include="Assets\Scripts\PlayerMove.cs" />
-     <Compile Include="Assets\Scripts\ScreenPanelHelper.cs" />
+     <Compile Include="Assets\Scripts\MusicControllerScript.cs" />
+     <Compile Include="Assets\Scripts\PlayerControlScript.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

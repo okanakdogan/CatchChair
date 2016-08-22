@@ -19,7 +19,7 @@ public class ChairState : MonoBehaviour {
 	void  OnTriggerEnter2D(Collider2D other){
 		if (isCaptured == false) {
 			isCaptured = true;
-			other.gameObject.GetComponent<PlayerMove> ().onChair = true;
+			//other.gameObject.GetComponent<PlayerControlScript> ().onChair = true;
 			occupier = other.gameObject;
 		}
 	}
