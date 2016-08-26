@@ -12,6 +12,10 @@ public class PlayerControlScript : MonoBehaviour {
 	public Sprite rush_face;
 	public Sprite cry_face;
 
+	private float closeRadius = 1f;
+	private float radius = 1.6f;
+	private float speed = 1f;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -22,7 +26,7 @@ public class PlayerControlScript : MonoBehaviour {
 		//rush_face = Resources.Load ("Textures/player-rush",typeof(Sprite)) as Sprite;
 		//cry_face = Resources.Load ("Textures/player-cry",typeof(Sprite)) as Sprite;
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 	
@@ -39,9 +43,7 @@ public class PlayerControlScript : MonoBehaviour {
 
 	public void moveAroundChairs(){
 
-		float radius = 1.6f;
-		float speed = 1f;
-		float step = 0.1f;
+
 
 		//change face
 		if (!name.Equals("playerToWin") && mySprRend.sprite != nerv_face) {
@@ -50,13 +52,18 @@ public class PlayerControlScript : MonoBehaviour {
 
 		//find close chair
 		closeChair = getClosestChair ();
-
+		//go away if so close
+		/*
+		if (Vector3.Distance (closeChair.transform.position, transform.position) > closeRadius) {
+			transform.position= Vector3.Lerp(transform.position,closeChair.transform.position+closeChair.transform.right*-1.1f
+			                                 ,Time.deltaTime * speed);
+		}*/
 		//get close if you away
 		if (Vector3.Distance (closeChair.transform.position, transform.position) > radius) {
-			Debug.Log("goClose");
+			//Debug.Log("goClose");
 			transform.position= Vector3.Lerp(transform.position,closeChair.transform.position,Time.deltaTime * speed);
 		} else {
-			Debug.Log("Rotate");
+			//Debug.Log("Rotate");
 			//find vector toward him
 			Vector3 chairToVector = closeChair.position - transform.position;
 			chairToVector.Normalize ();
@@ -65,7 +72,7 @@ public class PlayerControlScript : MonoBehaviour {
 			chairToVector = Quaternion.Euler (0, 0, 90) * chairToVector;
 			//move
 
-			transform.position = transform.position+chairToVector*step;
+			transform.position = transform.position+chairToVector*gameControl.playerStep;
 		}
 
 	}
@@ -133,7 +140,6 @@ public class PlayerControlScript : MonoBehaviour {
 
 				localCloseChair = chairs.transform.GetChild (i).transform;
 			}
-			
 		}
 		
 		//Debug.Log ("close Chair index" + minIndex);
@@ -146,12 +152,11 @@ public class PlayerControlScript : MonoBehaviour {
 		if (mySprRend.sprite != cry_face) {
 			mySprRend.sprite = cry_face;
 		}
-
+		//lerp to stand place
 		transform.position = Vector3.Lerp (transform.position, GameObject.Find("StandPlace").transform.position, 2.5f * Time.deltaTime);
 	}
 	public void getAwayFromChair(){
-		/*transform.position = Vector3.Lerp (transform.position,
-		                                   transform.position+ ((closestChairTrans.right) * -80),1f*Time.deltaTime);*/
+
 		if (closeChair != null) {
 			Vector3 goVec = closeChair.transform.right * -1.5f;
 			goVec.z = transform.position.z;

@@ -10,6 +10,9 @@ public class GameControlScript : MonoBehaviour {
 	private ChairsController cs;
 	public GameObject roundLoser;
 	private bool chairDeleted;
+	public float playerStep ;
+	private int score;
+	private Text ScoreText;
 
 	private GameObject winText;
 	private GameObject loseText;
@@ -28,13 +31,16 @@ public class GameControlScript : MonoBehaviour {
 		winText.SetActive (false);
 		loseText.SetActive (false);
 		nextRoundText.SetActive (false);
+		playerStep = 0.05f;
+		score = 0;
+		ScoreText = GameObject.Find ("Canvas/ScoreText").GetComponent<Text> ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	
 		//game loop with states
-		//TODO look input escape button 
+
 		if (Input.GetKeyDown (KeyCode.Escape)) {
 			Application.LoadLevel("MainMenu");
 		}
@@ -95,8 +101,23 @@ public class GameControlScript : MonoBehaviour {
 					}else{
 					//next round gui
 						nextRoundText.SetActive(true);
+
 					//wait for input to start music
 						if (Input.GetMouseButtonDown (0)) {
+							// calculate score
+							if(cs.getPointChairIndex()!=-1){
+								GameObject pointSitter =cs.transform.GetChild(cs.getPointChairIndex()).GetComponent<ChairState>().occupier;
+								if(cs.isPointChairOn() && pointSitter.name.Equals("playerToWin")){
+									score+=20;
+								}
+								else{
+									score+=10;
+								}
+							}
+							else{
+								score+=10;
+							}
+							ScoreText.text =score.ToString();
 							//getaway
 							getAwayAllPlayers ();
 							nextRoundText.SetActive(false);
@@ -120,18 +141,22 @@ public class GameControlScript : MonoBehaviour {
 				chairDeleted=true;
 				//clear chair states
 				cs.clearChairStatus ();
+
+				//inc. round speed
+				playerStep = 0.05f + (8-cs.chairCount)*(0.1f/7f);
 			}
 
 			gameState=0;
 		}
 	}
 
-
+	//checks is the loser next to stand place
 	private bool checkOnStandPlace(){
 	
 		return (Vector3.Distance (roundLoser.transform.position, GameObject.Find ("StandPlace").transform.position) < 0.5f);
 
 	}	
+	// moves all players which sat end of round
 	private void getAwayAllPlayers(){
 		Transform players = GameObject.Find ("Players").transform;
 
